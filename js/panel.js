@@ -49,6 +49,7 @@ storeLocator.Panel = function(el, opt_options) {
       'featureFilter': true,
       'directions': true,
       'view': null,
+      'maxStoresInPanel' : 10,
       'noStoresHtml': '<li class="no-stores">There are no stores in ' +
       'this area.</li>',
       'noStoresInViewHtml': '<li class="no-stores">There are ' +
@@ -332,8 +333,7 @@ storeLocator.Panel.prototype.stores_changed = function() {
     view.highlight(this['store'], true);
   };
 
-  // TODO(cbro): change 10 to a setting/option
-  for (var i = 0, ii = Math.min(10, stores.length); i < ii; i++) {
+  for (var i = 0, ii = Math.min(this.settings_.maxStoresInPanel, stores.length); i < ii; i++) {
     var storeLi = stores[i].getInfoPanelItem();
     storeLi['store'] = stores[i];
     if (selectedStore && stores[i].getId() == selectedStore.getId()) {
