@@ -48,7 +48,12 @@ storeLocator.Panel = function(el, opt_options) {
       'locationSearchLabel': 'Where are you?',
       'featureFilter': true,
       'directions': true,
-      'view': null
+      'view': null,
+      'noStoresHtml': '<li class="no-stores">There are no stores in ' +
+      'this area.</li>',
+      'noStoresInViewHtml': '<li class="no-stores">There are ' +
+      'no stores in this area. However, stores closest to you are ' +
+      'listed below.</li>'
     }, opt_options);
 
   this.directionsRenderer_ = new google.maps.DirectionsRenderer({
@@ -301,22 +306,6 @@ storeLocator.Panel.prototype.idle_ = function(map) {
 };
 
 /**
- * @const
- * @type {string}
- * @private
- */
-storeLocator.Panel.NO_STORES_HTML_ = '<li class="no-stores">There are no' +
-    ' stores in this area.</li>';
-
-/**
- * @const
- * @type {string}
- * @private
- */
-storeLocator.Panel.NO_STORES_IN_VIEW_HTML_ = '<li class="no-stores">There are' +
-    ' no stores in this area. However, stores closest to you are' +
-    ' listed below.</li>';
-/**
  * Handler for stores_changed. Updates the list of stores.
  * @this storeLocator.Panel
  */
@@ -334,9 +323,9 @@ storeLocator.Panel.prototype.stores_changed = function() {
   this.storeList_.empty();
 
   if (!stores.length) {
-    this.storeList_.append(storeLocator.Panel.NO_STORES_HTML_);
+    this.storeList_.append(this.settings_.noStoresHtml);
   } else if (bounds && !bounds.contains(stores[0].getLocation())) {
-    this.storeList_.append(storeLocator.Panel.NO_STORES_IN_VIEW_HTML_);
+    this.storeList_.append(this.settings_.noStoresInViewHtml);
   }
 
   var clickHandler = function() {
